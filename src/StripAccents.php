@@ -61,4 +61,17 @@ class StripAccents
 
         return $string;
     }
+
+    /**
+     * @param string $string
+     * @param string $encoding
+     * @param string $replaceWith
+     * @return string
+     */
+    public static function stripNonPrint(string $string,
+                                         string $replaceWith = '',
+                                         string $encoding = self::DEFAULT_ENCODING): string
+    {
+        return preg_replace('/[[:^print:]]/', $replaceWith, self::strip($string, $encoding));
+    }
 }
