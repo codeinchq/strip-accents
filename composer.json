@@ -1,6 +1,6 @@
 {
   "name": "codeinc/strip-accents",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Removes accents from strings",
   "homepage": "https://github.com/CodeIncHQ/StripAccents",
   "type": "library",
@@ -24,8 +24,8 @@
   "authors": [
     {
       "name": "Joan Fabrégat",
-      "email": "joan@codeinc.fr",
-      "homepage": "https://www.codeinc.fr",
+      "email": "joan@codeinc.co",
+      "homepage": "https://www.codeinc.co",
       "role": "developer"
     }
   ],
