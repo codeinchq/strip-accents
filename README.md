@@ -13,6 +13,9 @@ echo StripAccents::strip("C'est une super chaîne de caractères avec beaucoup d
 echo StripAccents::strip("ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ");
 // echoes: AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy
 
+echo StripAccents::stripNonPrint("ABC ÀÈÝ 是我这");
+// echoes: ABC AEY ---
+
 // You can specify any encoding supported by htmlentities() as a second parameter
 echo StripAccents::strip("A strïng with àccénts", "iso-8859-1");
 ```
