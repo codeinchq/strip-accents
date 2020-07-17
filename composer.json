@@ -1,6 +1,6 @@
 {
   "name": "codeinc/strip-accents",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Removes accents from strings",
   "homepage": "https://github.com/CodeIncHQ/StripAccents",
   "type": "library",
