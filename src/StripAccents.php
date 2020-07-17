@@ -39,7 +39,7 @@ class StripAccents
      * @param string $encoding
      * @return string
      */
-    public static function strip(string $string, $encoding = self::DEFAULT_ENCODING):string
+    public static function strip(string $string, string $encoding = self::DEFAULT_ENCODING): string
     {
         // converting accents in HTML entities
         $string = htmlentities($string, ENT_NOQUOTES, $encoding);
