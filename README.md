@@ -13,7 +13,7 @@ A PHP library to remove accents and diacritics from strings.
 composer require codeinc/strip-accents
 ```
 
-Requires PHP 8.1 or later with the `mbstring` extension.
+Requires PHP 8.2 or later with the `mbstring` extension.
 
 ## Usage
 
