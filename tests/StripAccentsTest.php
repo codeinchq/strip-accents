@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class StripAccentsTest extends TestCase
 {
-    private const array ACCENT_MAP = [
+    private const ACCENT_MAP = [
         'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A',
         'Ç' => 'C',
         'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
