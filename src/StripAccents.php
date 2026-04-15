@@ -9,7 +9,7 @@ namespace CodeInc\StripAccents;
  */
 class StripAccents
 {
-    private const DEFAULT_ENCODING = 'utf-8';
+    public const DEFAULT_ENCODING = 'utf-8';
 
     /**
      * Strips accents and diacritics from a string.
