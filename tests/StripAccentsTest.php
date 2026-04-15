@@ -1,63 +1,93 @@
 <?php
-//
-// +---------------------------------------------------------------------+
-// | CODE INC. SOURCE CODE                                               |
-// +---------------------------------------------------------------------+
-// | Copyright (c) 2017 - Code Inc. SAS - All Rights Reserved.           |
-// | Visit https://www.codeinc.fr for more information about licensing.  |
-// +---------------------------------------------------------------------+
-// | NOTICE:  All information contained herein is, and remains the       |
-// | property of Code Inc. SAS. The intellectual and technical concepts  |
-// | contained herein are proprietary to Code Inc. SAS are protected by  |
-// | trade secret or copyright law. Dissemination of this information or |
-// | reproduction of this material  is strictly forbidden unless prior   |
-// | written permission is obtained from Code Inc. SAS.                  |
-// +---------------------------------------------------------------------+
-//
-// Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     15/03/2018
-// Time:     10:57
-// Project:  StripAccents
-//
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace CodeInc\StripAccents\Tests;
+
 use CodeInc\StripAccents\StripAccents;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-
-/**
- * Class StripAccentsTest
- *
- * @package CodeInc\StripAccents\Tests
- * @author Joan Fabrégat <joan@codeinc.fr>
- */
 class StripAccentsTest extends TestCase
 {
-    public const ACCENTS = [
-        'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î',
-        'Ï', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à', 'á', 'â',
-        'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ò',
-        'ó', 'ô', 'õ', 'ö', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ'];
-    
-    public const LETTERS = [
-        'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I',
-        'I', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 'a', 'a', 'a',
-        'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'e', 'o',
-        'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y'
+    private const array ACCENT_MAP = [
+        'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A',
+        'Ç' => 'C',
+        'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+        'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
+        'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
+        'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U',
+        'Ý' => 'Y',
+        'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a',
+        'ç' => 'c',
+        'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e',
+        'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
+        'ð' => 'e',
+        'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o',
+        'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u',
+        'ý' => 'y', 'ÿ' => 'y',
     ];
 
-    public function testOneByOne():void
+    public static function accentProvider(): iterable
     {
-        foreach (self::ACCENTS as $key => $accent) {
-            self::assertTrue(StripAccents::strip($accent) == self::LETTERS[$key]);
+        foreach (self::ACCENT_MAP as $accented => $expected) {
+            yield $accented => [$accented, $expected];
         }
     }
 
-    public function testAll():void
+    #[DataProvider('accentProvider')]
+    public function testIndividualAccent(string $accented, string $expected): void
     {
-        self::assertTrue(
-            StripAccents::strip(implode("", self::ACCENTS))
-            == implode(self::LETTERS)
+        $this->assertSame($expected, StripAccents::strip($accented));
+    }
+
+    public function testAllAccentsConcatenated(): void
+    {
+        $input = implode('', array_keys(self::ACCENT_MAP));
+        $expected = implode('', array_values(self::ACCENT_MAP));
+        $this->assertSame($expected, StripAccents::strip($input));
+    }
+
+    public function testSentence(): void
+    {
+        $this->assertSame(
+            "C'est une super chaine de caracteres avec beaucoup d'accents",
+            StripAccents::strip("C'est une super chaîne de caractères avec beaucoup d'accents"),
         );
+    }
+
+    public function testAsciiPassthrough(): void
+    {
+        $ascii = 'Hello World 123 !@#';
+        $this->assertSame($ascii, StripAccents::strip($ascii));
+    }
+
+    public function testEmptyString(): void
+    {
+        $this->assertSame('', StripAccents::strip(''));
+    }
+
+    public function testLigatures(): void
+    {
+        $this->assertSame('oe', StripAccents::strip('œ'));
+        $this->assertSame('AE', StripAccents::strip('Æ'));
+    }
+
+    public function testStripNonPrint(): void
+    {
+        $this->assertSame('ABC AEY ', StripAccents::stripNonPrint("ABC ÀÈÝ 是我这"));
+    }
+
+    public function testStripNonPrintWithReplacement(): void
+    {
+        $result = StripAccents::stripNonPrint("ABC ÀÈÝ 是我这", '-');
+        $this->assertStringStartsWith('ABC AEY ', $result);
+        // each CJK character is 3 bytes in UTF-8, each non-printable byte is replaced individually
+        $this->assertSame(9, substr_count($result, '-'));
+    }
+
+    public function testStripNonPrintEmptyString(): void
+    {
+        $this->assertSame('', StripAccents::stripNonPrint(''));
     }
 }
